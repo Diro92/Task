@@ -9,48 +9,46 @@ import {MatTableDataSource, MatTable} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { ToastrService } from 'ngx-toastr';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { ModalDetailsComponent } from 'src/app/ModalDetails/modal-details/modal-details.component';
+
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']  
+  selector: 'app-actividades',
+  templateUrl: './actividades.component.html',
+  styleUrls: ['./actividades.component.css']
 })
-
-
-export class AppComponent implements OnInit {
+export class ActividadesComponent implements OnInit {
   @ViewChild(MatTable) table: MatTable<any>;
-
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   TaskList: Objeto[];
+  TareasGuardadas=[];
+   animal: string="Ramon";
   displayedColumns = ['Nombre','Tipo','Duracion','Actions'];
   dataSource = new MatTableDataSource<Objeto>();
-  constructor(db: AngularFireDatabase, public Information: InformationService,
-    private toastr: ToastrService){
+  constructor(db: AngularFireDatabase,
+    private Information: InformationService,
+    private toastr: ToastrService,
+    private dialog:MatDialog
+    ){
 
 
   }
   ngOnInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+    this.Information.getData().snapshotChanges().subscribe(
 
-
-
-
-    //##########################################
-     var x = this.Information.getData();
-       x.snapshotChanges().subscribe(item=>{
-
-    this.TaskList = []; 
-    item.forEach(element =>{
-      var y = element.payload.toJSON()
-      y["$key"] = element.key;
-      this.TaskList.push(y as Objeto);
-      this.dataSource.data = this.TaskList;
-    
-      
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-     
+      list=>{
+        this.TaskList = list.map(item =>{
+          return {
+            $key:item.key,
+            ...item.payload.val()
+          }
         })
-    })
+        this.dataSource.data = this.TaskList;
+      }
+    )
   }
 
     form = new FormGroup({
@@ -65,9 +63,6 @@ export class AppComponent implements OnInit {
 
     this.form.setValue(Objeto);
   }
- 
- 
-
   onSumbit(){
 
     if(this.form.get('$key').value==null){
@@ -87,7 +82,7 @@ export class AppComponent implements OnInit {
     if(confirm('Are you sure you want to delette this')){
       
       this.Information.delete(key);
-      
+      this.form.reset(); 
     }
     this.table.renderRows();
     
@@ -97,6 +92,19 @@ export class AppComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
  
+
+ //Pop up
+
+    open(Objeto:Objeto){
+   
+     
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.width = "80%";
+      dialogConfig.height = "80%";
+      dialogConfig.data = Objeto;
+      this.dialog.open(ModalDetailsComponent,dialogConfig)
+     
+    }
 
  //
 

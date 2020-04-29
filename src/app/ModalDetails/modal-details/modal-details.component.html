@@ -1,0 +1,23 @@
+<button (click)=Cerrar() mat-button class="close-icon">
+  <mat-icon >close</mat-icon>
+</button>
+
+<mat-card class="example-card">
+    <mat-card-header>
+      <div mat-card-avatar class="example-header-image"></div>
+      <mat-card-title>{{data.Nombre}}</mat-card-title>
+      <mat-card-subtitle>{{data.Tipo}}</mat-card-subtitle>
+    </mat-card-header>
+    <hr>
+    <mat-card-content>
+        <div class="left">
+          
+        </div>
+        <div class="right">
+            
+
+          <button class="btn btn-info" routerLink="Procesos" (click)="Ver()">Ver proceso completo</button>
+
+        </div>
+    </mat-card-content>
+</mat-card>

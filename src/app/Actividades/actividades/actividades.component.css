@@ -1,0 +1,46 @@
+.container{
+    margin-top: 5%;
+    position: relative;
+    border:solid none;
+    height: 50%;
+}
+
+table {
+ 
+    width: 100%;
+  }
+
+.Forma{
+    float: left;
+    width: 30%;
+    border:solid none;
+    
+}
+
+.Renderizacion{
+  
+  float: left;
+  border: solid none;
+  height: 100%;
+  width: 60%;
+  padding-left: 2%;
+  overflow: auto;
+  
+}
+
+
+
+  @media (max-width:600px){
+
+    .Forma {
+      float: none;
+      border:solid blue;
+      width: 100%;
+    }
+    .Renderizacion {
+      width: 100%;
+      float: none;;
+      border:solid red;
+    }
+
+  }
